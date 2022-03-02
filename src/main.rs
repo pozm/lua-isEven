@@ -12,11 +12,11 @@ static  LUA_FOOTER :&str = "\
 
 end";
 fn main() {
-    let now = Instant::now();
     let mut bytes = Vec::<u8>::from(LUA_HEADER);
     println!("to what number do i generate?");
     let mut input = String::new();
     std::io::stdin().read_line(&mut input);
+    let now = Instant::now();
     let mut f = File::create("./funny.lua").unwrap();
     let num = u64::from_str(input.as_str().trim_end()).unwrap_or(1);
     f.write_all(&*bytes);
