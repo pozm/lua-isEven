@@ -17,12 +17,18 @@ fn main() {
     println!("to what number do i generate?");
     let mut input = String::new();
     std::io::stdin().read_line(&mut input);
+    let mut f = File::create("./funny.lua").unwrap();
     let num = u64::from_str(input.as_str().trim_end()).unwrap_or(1);
+    f.write_all(&*bytes);
+    bytes.clear();
     for i in 0..num {
         bytes.append(&mut Vec::<u8>::from(format!("if (number == {}) then return {} end\n",i,i%2==0)));
+        if i % 10000 == 0 {
+            f.write(&mut bytes);
+            bytes.clear();
+        }
     }
     bytes.append(&mut Vec::<u8>::from(format!("{}\n -- generated {} in {:?} | lol",LUA_FOOTER,num,now.elapsed())));
-    let mut f = File::create("./funny.lua").unwrap();
-    f.write_all(&*bytes);
+    f.write(&*bytes);
     // println!("{:#?}",bytes)
 }
